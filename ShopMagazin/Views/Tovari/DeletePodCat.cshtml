@@ -1,0 +1,38 @@
+﻿@model ShopMagazin.Models.PodCatG
+
+    <div class="modal-content">
+        <div class="modal-windows">
+            <div class="obratnii-zvonok">
+                <div class="form-delete fformms" style="padding: 30px; background-color: #fff; border-radius: 5px; box-shadow: 1px 1px 10px 0 rgb(0 0 0 / 12%); color: #696969; ">
+                    <div class="zvonok-title">Удаление категории</div>
+                    <form asp-controller="Tovari" asp-action="DeletePodCat" method="post" class="callback-from">
+                        <div class="info-zvonok">Вы правда желаете удалить данную подкатегорию</div>
+                        <div class="form-zap">
+                            <label class="nonrequired">Наименование подкатегории:</label>
+                            <label class="nonrequired" style="color: black;">@Html.DisplayFor(model => model.podcategs.NamePodCategori)</label>
+                        </div>
+
+                        <div class="form-zap">
+                            <label class="nonrequired">Категория:</label>
+                            <label class="nonrequired" style="color: black;">@Html.DisplayFor(model => model.podcategs.NameCategori)</label>
+                        </div>
+
+                        <label asp-for="@Model.podcategs.ImageId" class="nonrequired"></label>
+                        <div class="form-zap">
+                            <div class="profile-picture-upload">
+                                <img src="@Url.Action("GetImage", new { id=Model.podcategs.ImageId})" style=" width: 64px; height: 64px;" alt="Profile picture preview" class="imagePreview">
+                            </div>
+                        </div>
+                        <div class="form-zap">
+                            <div class="btn-center">
+                                <input class="sbm-zvonok" type="submit" value="Удалить" />
+                            </div>
+                        </div>
+                    </form>
+                    <div class="btn-center">
+                        <button class="sbm-zvonok otm" style="background-color: #c4c4c4; margin-top: 15px; color: White;" onclick='$(".modal-content").remove();'>Отмена</button>
+                    </div>
+                </div>
+             </div>
+        </div>
+    </div>

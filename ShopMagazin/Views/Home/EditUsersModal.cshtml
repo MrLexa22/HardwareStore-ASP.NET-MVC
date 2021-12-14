@@ -1,0 +1,64 @@
+﻿@using ShopMagazin.Controllers
+@model ShopMagazin.Models.User
+<link rel="stylesheet" type="text/css" href="~/css/style_list.css" />
+<div class="modal-content">
+    <div class="modal-windows">
+        <div class="obratnii-zvonok">
+            <div class="form-edit fformms" style="padding: 30px; background-color: #fff; border-radius: 5px; box-shadow: 1px 1px 10px 0 rgb(0 0 0 / 12%); color: #696969; ">
+                <div class="zvonok-title">Изменение данных пользователя</div>
+                <form asp-controller="Home" asp-action="EditUsersModal" method="post" class="callback-from">
+                    <div class="form-zap">
+                        <label class="nonrequired">ID: @Html.DisplayFor(model => model.Id)</label>
+                        @{ 
+                            OldEmail.OldE = Model.Email;
+                        }
+                    </div>
+                    <div class="form-zap">
+                        <label class="nonrequired" asp-for="Ima">Имя:</label>
+                        <input type="text" class="inputs tel-in" asp-for="Ima">
+                        <span asp-validation-for="Ima" style="color: red;"></span>
+                    </div>
+                    <div class="form-zap">
+                        <label class="nonrequired" asp-for="Familia">Фамилия:</label>
+                        <input type="text" class="inputs tel-in" asp-for="Familia">
+                        <span asp-validation-for="Familia" style="color: red;"></span>
+                    </div>
+                    <div class="form-zap">
+
+                        <label class="nonrequired" asp-for="Email">Email:</label>
+                        <input type="text" class="inputs tel-in" asp-for="Email">
+                        <span asp-validation-for="Email" style="color: red;"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Role" class="nonrequired"></label>
+                        <br />
+                        <input asp-for="Role" type="text" id="rod" style="opacity: 0; width: 0px; height: 0px;" />
+                        <span asp-validation-for="Role" style="color: red;"></span>
+                        <div class="dropdown1" style="margin-bottom: 15px;">
+                            <div class="select">
+                                <span id="rod1">Выберите роль пользователя</span>
+                                <i class="fa fa-chevron-left"></i>
+                            </div>
+                            <ul class="dropdown-menu1">
+                                <li>Покупатель</li>
+                                <li>Администратор</li>
+                                <li>Оператор</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <script type="text/javascript" src="~/js/script_list.js"></script>
+                    <div class="form-zap">
+                        <div class="btn-center">
+                            <input class="sbm-zvonok" type="submit" value="Изменить" />
+                        </div>
+                    </div>
+                </form>
+                <div class="btn-center">
+                    <button class="sbm-zvonok otm" style="background-color: #c4c4c4; margin-top: 15px; color: White;" onclick='$(".modal-content").remove();'>Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

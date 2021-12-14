@@ -1,0 +1,31 @@
+﻿@model ShopMagazin.Models.User
+
+    <div class="modal-content">
+        <div class="modal-windows">
+            <div class="obratnii-zvonok">
+                <div class="form-delete fformms" style="padding: 30px; background-color: #fff; border-radius: 5px; box-shadow: 1px 1px 10px 0 rgb(0 0 0 / 12%); color: #696969; ">
+                    <div class="zvonok-title">Удаление пользователя</div>
+                    <form asp-controller="Home" asp-action="DeleteUsersModal" method="post" class="callback-from">
+                        <div class="info-zvonok">Вы правда желаете удалить данного пользователя?</div>
+                        <div class="form-zap">
+                            <label class="nonrequired" for="ima">Имя: @Html.DisplayFor(model => model.Ima)</label>
+                        </div>
+                        <div class="form-zap">
+                            <label class="nonrequired" for="familia">Фамилия: @Html.DisplayFor(model => model.Familia)</label>
+                        </div>
+                        <div class="form-zap">
+                            <label class="nonrequired" for="familia">Email: @Html.DisplayFor(model => model.Email)</label>
+                        </div>
+                        <div class="form-zap">
+                            <div class="btn-center">
+                                <input class="sbm-zvonok" type="submit" value="Удалить" />
+                            </div>
+                        </div>
+                    </form>
+                    <div class="btn-center">
+                        <button class="sbm-zvonok otm" style="background-color: #c4c4c4; margin-top: 15px; color: White;" onclick='$(".modal-content").remove();'>Отмена</button>
+                    </div>
+                </div>
+             </div>
+        </div>
+    </div>

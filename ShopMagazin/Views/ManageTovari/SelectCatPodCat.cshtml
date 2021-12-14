@@ -1,0 +1,43 @@
+﻿@model ShopMagazin.Models.PodCatG
+@{
+    ViewData["Title"] = "Выберите подкатегорию";
+}
+
+<main class="content-main">
+    <div class="con-man">
+        <div class="main-div-left" style="max-width: 100%;">
+            <h1 class="header-name-podcateg">Выберите подкатегорию</h1>
+            <div class="blocks-category" style="margin: 0;">
+                <div class="block-main" style="height: auto;">
+                    <img src="https://i.pinimg.com/originals/90/bc/0c/90bc0c906fc30587b4863d0e6089f364.jpg" alt="" class="img-block">
+                    <div class="categories">
+                        <p class="zagolovok-cat">
+                            <a asp-controller="ManageTovari" asp-action="PageTovariAll" style="text-decoration: none; color: #C62306;">Все товары </a>
+                        </p>
+                    </div>
+                </div>
+                <div class="blocks-category" style="margin: 0; margin-bottom: 15px;">
+                    @foreach (var item in Model.PodU)
+                    {
+                        <div class="block-main" style="height: auto;">
+                            <img src="@Url.Action("GetImage", new { id=item.ImageId})" alt="" class="img-block">
+                            <div class="categories">
+                                <p class="zagolovok-cat" style="cursor: default;">@item.NameCategori</p>
+                                @foreach (var items in Model.PodCategsList)
+                                {
+                                    @if (items.NameCategori == item.NameCategori)
+                                    {
+                                        <p class="zagolovok-categories">
+                                            <a asp-controller="ManageTovari" asp-action="PageManageTovari" asp-route-id="@items.Id" class="categ-ssilka">@items.NamePodCategori</a>
+                                        </p>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+

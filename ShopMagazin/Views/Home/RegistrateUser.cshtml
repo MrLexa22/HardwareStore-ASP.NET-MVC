@@ -1,0 +1,98 @@
+﻿@using System.Diagnostics;
+@model ShopMagazin.Models.RegistrateUsers
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js" defer></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" defer></script>
+<div class="modal-content">
+    @Html.AntiForgeryToken()
+    <div class="modal-windows modal-body">
+        <div class="obratnii-zvonok">
+            <div class="form-auth fformms" style="padding: 30px; background-color: #fff; border-radius: 5px; box-shadow: 1px 1px 10px 0 rgb(0 0 0 / 12%); color: #696969; ">
+                <div class="regandauth">
+                    <a class="button-forn" id="btn-vxod-form" asp-action="AuthenticateUser" asp-controller="Home"><p class="regandauthc-texts">Вход</p></a>
+                    <a class="button-forn active"><p class="regandauthc-texts">Регистрация</p></a>
+                </div>
+                <div class="zvonok-title">Регистрация пользователя</div>
+                <form asp-controller="Home" asp-action="RegistrateUser" class="callback-from">
+                    <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+                    <div class="form-zap">
+                        <label class="required" for="email">E-mail</label>
+                        <input type="text" asp-for="Email" class="inputs imz-in">
+                        <span asp-validation-for="Email" style="color: red;"></span>
+                    </div>
+                    <div class="form-zap">
+                        <label class="required" for="password">Пароль</label>
+                        <input type="password" asp-for="Password" class="inputs imz-in">
+                        <span asp-validation-for="Password" style="color: red;"></span>
+                    </div>
+                    <div class="form-zap">
+                        <label class="required" for="password-podt">Подтверждение пароля</label>
+                        <input type="password" asp-for="ConfirmPassword" class="inputs imz-in">
+                        <span asp-validation-for="ConfirmPassword" style="color: red;"></span>
+                    </div>
+                    <div class="form-zap">
+                        <label class="required" for="ima">Имя</label>
+                        <input type="text" asp-for="Ima" class="inputs imz-in">
+                        <span asp-validation-for="Ima" style="color: red;"></span>
+                    </div>
+                    <div class="form-zap">
+                        <label class="required" for="ima">Фамилия</label>
+                        <input type="text" asp-for="Familia" class="inputs imz-in">
+                        <span asp-validation-for="Familia" style="color: red;"></span>
+                    </div>
+                    @*<div class="form-zap">
+                        <div class="checkbox">
+                            <input class="custom-checkbox" required type="checkbox" id="sogl1">
+                            <label for="sogl1" class="text1">Согласен на обработку личных данных</label><b style="color:#c62306;"> 1</b>
+                        </div>
+                    </div>*@
+                </form>
+                <div class="form-zap">
+                    <div class="btn-center">
+                        <button class="sbm-zvonok" data-save="modal1" id="Regis">Зарегистрироваться</button>
+                    </div>
+                </div>
+                <script>
+                    var placeholderElement = $('.modal');
+                    $("#Regis").click(function (e) {
+                        console.log("Clixk on Regis");
+                        //e.preventDefault();
+                        var form = $(this).parents('.modal').find('form');
+                        var actionUrl = form.attr('action');
+                        var dataToSend = form.serialize();
+
+                        $.post(actionUrl, dataToSend).done(function (data) {
+                            var newBody = $('.modal-body', data);
+                            placeholderElement.find('.modal-body').replaceWith(newBody);
+
+                            var isValid = newBody.find('[name="IsValid"]').val() == 'True';
+                            console.log(newBody.find('[name="IsValid"]').val());
+                            if (newBody.find('[name="IsValid"]').val() == undefined || newBody.find('[name="IsValid"]').val() == 'True') {
+                                window.location.href = '/';
+                            }
+                        });
+                    });
+                    $("#btn-vxod-form").click(function (e) {
+                        $.ajaxSetup({ cache: false });
+                        e.preventDefault();
+                        $.get(this.href, function (data) {
+                            $('#dialogContent').html(data);
+                            $('#modDialog').show();
+                        });
+                    });
+                </script>
+                <div class="btn-center">
+                    <button class="sbm-zvonok otm" style="background-color: #c4c4c4; margin-top: 10px; color: White;" onclick='$(".modal-content").remove();'>Отмена</button>
+                </div>
+                <div class="form-footer">
+                    Пароль должен быть не менее 8 символов длиной. Символом “<svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7.67712 5.33469L5.49512 3.99996L7.67704 2.66523C7.71458 2.64222 7.74148 2.60527 7.75178 2.56242C7.76208 2.51957 7.75493 2.4744 7.73201 2.43686L7.09085 1.38879C7.0431 1.31057 6.94071 1.2859 6.86248 1.33373L4.77963 2.60793V0.166084C4.77963 0.0744055 4.70522 0 4.61354 0H3.38511C3.29343 0 3.21902 0.0744055 3.21902 0.166084V2.60793L1.13609 1.33382C1.05769 1.28599 0.955553 1.31057 0.907721 1.38887L0.266555 2.43695C0.243636 2.47448 0.236494 2.51965 0.246791 2.5625C0.257089 2.60535 0.283994 2.64231 0.321529 2.66531L2.50354 3.99996L0.321529 5.33469C0.283994 5.35761 0.257089 5.39465 0.246791 5.43741C0.236494 5.48034 0.243636 5.52552 0.266555 5.56305L0.907721 6.61104C0.955553 6.68927 1.05769 6.71401 1.13609 6.66618L3.21902 5.39199V7.83383C3.21902 7.92551 3.29343 7.99992 3.38511 7.99992H4.61354C4.70522 7.99992 4.77963 7.92551 4.77963 7.83383V5.39207L6.86257 6.6661C6.94079 6.71393 7.04318 6.68927 7.09093 6.61113L7.7321 5.56305C7.75502 5.52552 7.76216 5.48034 7.75186 5.4375C7.74165 5.39456 7.71466 5.35769 7.67712 5.33469Z" fill="#C62306" />
+                    </svg> ” отмечены обязательные для заполнения поля.
+                    <br><br>
+                    <b style="color:#c62306;">1</b> - Настоящим в соответствии с Федеральным законом № 152-ФЗ “О персональных данных” от 27.07.2006 Вы подтверждаете свое согласие на обработку персональных данных. С политикой можно ознакомиться по
+                    <a href="https://mpt.ru">ссылке.</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,56 @@
+﻿@model ShopMagazin.Models.TovariManage
+
+    <div class="modal-content">
+        <div class="modal-windows">
+            <div class="obratnii-zvonok">
+                <div class="form-delete fformms" style="padding: 30px; background-color: #fff; border-radius: 5px; box-shadow: 1px 1px 10px 0 rgb(0 0 0 / 12%); color: #696969; ">
+                    <div class="zvonok-title">Удаление товара</div>
+                    <form asp-controller="ManageTovari" asp-action="DeleteTovar" method="post" class="callback-from">
+                        <div class="info-zvonok">Вы правда желаете удалить данный товар</div>
+                        <div class="form-zap">
+                            <label class="nonrequired">Наименование категории: </label>
+                            <label class="nonrequired" style="color: black;">@Html.DisplayFor(model => model.tovar.NameCategori)</label>
+                        </div>
+                        <div class="form-zap">
+                            <label class="nonrequired">Наименование подкатегории: </label>
+                            <label class="nonrequired" style="color: black;">@Html.DisplayFor(model => model.tovar.NamePodCategori)</label>
+                        </div>
+                        <div class="form-zap">
+                            <label class="nonrequired">Артикул: </label>
+                            <label class="nonrequired" style="color: black;">@Html.DisplayFor(model => model.tovar.articul)</label>
+                        </div>
+                        <div class="form-zap">
+                            <label class="nonrequired">Наименование товара: </label>
+                            <label class="nonrequired" style="color: black;">@Html.DisplayFor(model => model.tovar.NameTovar)</label>
+                        </div>
+                        <div class="form-zap">
+                            <label class="nonrequired">Модель: </label>
+                            <label class="nonrequired" style="color: black;">@Html.DisplayFor(model => model.tovar.ModelTovar)</label>
+                        </div>
+                        <div class="form-zap">
+                            <label class="nonrequired">Цена: </label>
+                            <label class="nonrequired" style="color: black;">@Html.DisplayFor(model => model.tovar.Cena)</label>
+                        </div>
+                        <div class="form-zap">
+                            <label class="nonrequired">Страна: </label>
+                            <label class="nonrequired" style="color: black;">@Html.DisplayFor(model => model.tovar.StranaProizvoditel)</label>
+                        </div>
+                        <div class="form-zap">
+                            <label class="nonrequired">Изображение: </label>
+                            <div class="profile-picture-upload">
+                                <img src="@Url.Action("GetImage", new { id=Model.tovar.ImageId})" style=" width: 64px; height: 64px;" alt="Profile picture preview" class="imagePreview">
+                            </div>
+                        </div>
+                        <div class="form-zap">
+                            <div class="btn-center">
+                                <input class="sbm-zvonok" type="submit" value="Удалить" />
+                            </div>
+                        </div>
+                    </form>
+                    <div class="btn-center">
+                        <button class="sbm-zvonok otm" style="background-color: #c4c4c4; margin-top: 15px; color: White;" onclick='$(".modal-content").remove();'>Отмена</button>
+                    </div>
+                </div>
+             </div>
+        </div>
+    </div>

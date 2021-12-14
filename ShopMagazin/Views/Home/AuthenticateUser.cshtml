@@ -1,0 +1,77 @@
+﻿@using System.Diagnostics;
+@model ShopMagazin.Models.AuthenticationUser
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js" defer></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" defer></script>
+<div class="modal-content">
+    @Html.AntiForgeryToken()
+    <div class="modal-windows modal-body">
+        <div class="obratnii-zvonok">
+            <div class="form-auth fformms" style="padding: 30px; background-color: #fff; border-radius: 5px; box-shadow: 1px 1px 10px 0 rgb(0 0 0 / 12%); color: #696969; ">
+                <div class="regandauth">
+                    <a class="button-forn active"><p class="regandauthc-texts">Вход</p></a>
+                    <a class="button-forn" id="btn-reg-form" asp-action="RegistrateUser" asp-controller="Home"><p class="regandauthc-texts">Регистрация</p></a>
+                </div>
+                <div class="zvonok-title">Авторизация пользователя</div>
+                <div class="validation" asp-validation-summary="ModelOnly">
+                    <div class="attention">
+                        <div class="alert__title">Ошибка!</div>Профиль пользователя не найден или Email не подтверждён.<br>
+                    </div>
+                </div>
+                <form asp-controller="Home" asp-action="AuthenticateUser" class="callback-from">
+                    <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+                    <div class="form-zap">
+                        <label asp-for="Email" class="nonrequired"></label>
+                        <input type="text" asp-for="Email" class="inputs imz-in" />
+                    </div>
+                    <div class="form-zap">
+                        <label asp-for="Password" class="nonrequired"></label>
+                        <input type="password" asp-for="Password" class="inputs imz-in" />
+                    </div>
+                </form>
+                <div class="form-zap">
+                    <div class="btn-center">
+                        <button class="sbm-zvonok" value="Войти" id="Vxod">Войти</button>
+                    </div>
+                </div>
+                <script>
+                    var placeholderElement = $('.modal');
+                    $("#Vxod").click(function (e) {
+                        //e.preventDefault();
+                        var form = $(this).parents('.modal').find('form');
+                        var actionUrl = form.attr('action');
+                        var dataToSend = form.serialize();
+
+                        $.post(actionUrl, dataToSend).done(function (data) {
+                            var newBody = $('.modal-body', data);
+                            placeholderElement.find('.modal-body').replaceWith(newBody);
+
+                            var isValid = newBody.find('[name="IsValid"]').val() == 'True';
+                            console.log(newBody.find('[name="IsValid"]').val());
+                            if (newBody.find('[name="IsValid"]').val() == undefined || newBody.find('[name="IsValid"]').val() == 'True') {
+                                window.location.href = '/';
+                            }
+                        });
+                    });
+                    $("#btn-reg-form").click(function (e) {
+                        $.ajaxSetup({ cache: false });
+                        e.preventDefault();
+                        $.get(this.href, function (data) {
+                            $('#dialogContent').html(data);
+                            $('#modDialog').show();
+                        });
+                    });
+                </script>
+                <div class="btn-center">
+                    <button class="sbm-zvonok otm" style="background-color: #c4c4c4; margin-top: 10px; color: White;" onclick='$(".modal-content").remove();'>Отмена</button>
+                </div>
+                @*<div class="btn-center btn-zabil">
+                    <button class="sbm-zabil">Забыли пароль?</button>
+                </div>
+                <div class="btn-center btn-zabil">
+                    <button class="sbm-zabil">Подтвердить Email</button>
+                </div>*@
+            </div>
+        </div>
+    </div>
+</div>

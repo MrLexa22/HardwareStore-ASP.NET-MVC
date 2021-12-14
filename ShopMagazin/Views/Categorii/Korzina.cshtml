@@ -1,0 +1,312 @@
+﻿@model ShopMagazin.Models.TovariInCart
+@{
+    ViewData["Title"] = "Корзина покупателя";
+}
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js" defer></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" defer></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="~/lib/jQuery-Mask-Plugin-master/dist/jquery.mask.js"></script>
+<main class="content-main">
+    <div class="con-man">
+        <div class="main-div-left">
+            <main class="main">
+                <header class="page-header">
+                    <h1>Корзина покупателя</h1>
+                </header>
+                @if (Model.Korzina.Count() > 0)
+                {
+                    <form asp-action="Korzina" asp-controller="Categorii" method="post" class="callback-from" enctype="multipart/form-data">
+                        <div class="basket">
+
+                            <div class="basket__row basket__row_header">
+                                <div class="basket__col basket__col_image-header"></div>
+                                <div class="basket__col basket__col_name">Наименование товара</div>
+                                <div class="basket__col basket__col_quanity-header">Количество</div>
+                                <div class="basket__col basket__col_price-header">Цена</div>
+                                <div class="basket__col basket__col_actions-header">Действия</div>
+                            </div>
+                            @foreach (var items in Model.Korzina)
+                            {
+                                <div class="basket-item">
+                                    <div class="basket__row">
+                                        <div class="basket__col basket__col_image">
+                                            <img src="@Url.Action("GetImage", new { id = items.ImageId })" alt="product image">
+                                        </div>
+                                        <div class="basket__col basket__col_name">
+                                            <div class="basket-item__name">
+                                                <a asp-action="Tovar" asp-controller="Categorii" asp-route-id="@items.Id">@items.NameTovar <b>@items.ModelTovar</b></a>
+                                            </div>
+                                        </div>
+                                        <div class="basket__col basket__col_quanity">
+                                            <div class="number-input">
+                                                <a style="height: 50%;" id="downdowndown-@items.Id" class="number-input__btn btn_primary" data-decrease="">
+                                                    <svg style="display: block; margin: 4px auto;" class="icon" width="9" height="6" viewBox="0 0 9 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M8.59117 1.56267C8.77524 1.36954 8.77524 1.06591 8.59117 0.872772L8.28019 0.546462C8.08317 0.339729 7.75331 0.33973 7.55629 0.546462L4.98895 3.24033C4.79192 3.44707 4.46206 3.44707 4.26504 3.24033L1.6977 0.546462C1.50068 0.339729 1.17082 0.339729 0.973798 0.546461L0.662814 0.872771C0.478749 1.06591 0.478749 1.36954 0.662814 1.56267L4.26504 5.34244C4.46206 5.54917 4.79192 5.54917 4.98894 5.34244L8.59117 1.56267Z" fill="white" />
+                                                    </svg>
+                                                </a>
+                                                <input readonly="readonly" type="number" id="kolichest-@items.Id" class="input number-input__input" min="1" value="@items.kolvo_tovara" name="product-quantity" data-basket-code="20918014" data-product-id="1577992">
+                                                <a style="height: 50%;" id="upupup-@items.Id" class="number-input__btn btn_primary" data-increase="">
+                                                    <svg style="display: block; margin: 4px auto;" class="icon" width="9" height="6" viewBox="0 0 9 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M0.634901 4.15956C0.450837 4.35269 0.450836 4.65632 0.634901 4.84946L0.945884 5.17577C1.14291 5.3825 1.47277 5.3825 1.66979 5.17577L4.23713 2.4819C4.43415 2.27516 4.76401 2.27516 4.96103 2.4819L7.52837 5.17577C7.7254 5.3825 8.05525 5.3825 8.25228 5.17577L8.56326 4.84946C8.74733 4.65632 8.74733 4.35269 8.56326 4.15956L4.96103 0.379793C4.76401 0.173061 4.43415 0.17306 4.23713 0.379793L0.634901 4.15956Z" fill="white" />
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            <script>
+                                        document.getElementById('upupup-@items.Id').onclick = function () {
+                                            if (Number(document.getElementById('kolichest-@items.Id').value) + 1 < 50) {
+                                                document.getElementById('kolichest-@items.Id').value = Number(document.getElementById('kolichest-@items.Id').value) + 1;
+                                                let myGreeting = setTimeout(function () {
+                                                    location.href = '@Url.Action("AddItemInExistCart", "Home")?id_tovara=@items.Id&new_kolvo=' + document.getElementById('kolichest-@items.Id').value;
+                                                }, 1000);
+                                            }
+                                            else
+                                                alert("Уж очень много товаров, низя так, оформите заказ и сообщите оператору, сколько Вам нужно товаров!");
+                                        };
+                                        document.getElementById('downdowndown-@items.Id').onclick = function () {
+                                            if ((Number(document.getElementById('kolichest-@items.Id').value) - 1) > 0) {
+                                                    document.getElementById('kolichest-@items.Id').value = Number(document.getElementById('kolichest-@items.Id').value) - 1;
+                                                    let myGreeting = setTimeout(function () {
+                                                        location.href = '@Url.Action("AddItemInExistCart", "Home")?id_tovara=@items.Id&new_kolvo=' + document.getElementById('kolichest-@items.Id').value;
+                                                    }, 1000);
+                                            }
+                                            else
+                                                alert("Низя меньше единицы товаров");
+                                        };
+                                            </script>
+                                        </div>
+
+                                        <div class="basket__col basket__col_price">
+                                            <div class="basket-price">
+                                                @((items.kolvo_tovara * Convert.ToDouble(items.Cena)).ToString())<span class="basket-price__currency">₽</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="basket__col basket__col_actions">
+                                            <div>
+                                                <a asp-action="DeleteFromCart" asp-controller="Home" asp-route-id_tovara="@items.Id" class="btn btn_transparent basket-action">
+                                                    Удалить
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <div class="card checkout" style="border-radius: 0px; box-shadow: none;">
+                                <div class="checkout__title">
+                                    <div class="checkout__step">2</div>
+                                    Способ получения
+                                </div>
+                                <div id="deliveryContainer">
+                                    <div class="profiles-form checkout__profile">
+                                        <div class="profiles-form__section">
+                                            <div class="profiles-form__title">Адрес доставки</div>
+                                            <div class="profiles-form__block">
+                                                <div class="form-group profiles-form__input">
+                                                    <label class="form-group__label form-group__label_required">
+                                                        Улица
+                                                    </label>
+                                                    <input asp-for="@Model.zakaz.Address_Ulica" type="text" class="input form-group__input" required="">
+                                                    <span asp-validation-for="@Model.zakaz.Address_Ulica" style="color: red;"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="profiles-form__block">
+                                                <div class="form-group profiles-form__input">
+                                                    <label class="form-group__label form-group__label_required">
+                                                        Дом
+                                                    </label>
+                                                    <input asp-for="@Model.zakaz.Address_Dom" type="text" class="input form-group__input" required="">
+                                                    <span asp-validation-for="@Model.zakaz.Address_Dom" style="color: red;"></span>
+                                                </div>
+
+                                                <div class="form-group profiles-form__input profiles-form__input_wide">
+                                                    <label class="form-group__label">
+                                                        Корпус/строение
+                                                    </label>
+                                                    <input asp-for="@Model.zakaz.Address_Korpus" type="text" class="input form-group__input">
+                                                    <span asp-validation-for="@Model.zakaz.Address_Korpus" style="color: red;"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="profiles-form__block">
+                                                <div class="form-group profiles-form__input">
+                                                    <label class="form-group__label">
+                                                        Квартира/офис
+                                                    </label>
+                                                    <input asp-for="@Model.zakaz.Address_Kvartira" type="text" class="input form-group__input">
+                                                    <span asp-validation-for="@Model.zakaz.Address_Kvartira" style="color: red;"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="profiles-form__block">
+                                                <div class="form-group profiles-form__input">
+                                                    <label class="form-group__label">
+                                                        Подъезд
+                                                    </label>
+                                                    <input asp-for="@Model.zakaz.Address_Podezd" type="text" class="input form-group__input">
+                                                    <span asp-validation-for="@Model.zakaz.Address_Podezd" style="color: red;"></span>
+                                                </div>
+
+                                                <div class="form-group profiles-form__input">
+                                                    <label class="form-group__label">
+                                                        Этаж
+                                                    </label>
+                                                    <input asp-for="@Model.zakaz.Address_Etazh" type="text" class="input form-group__input">
+                                                    <span asp-validation-for="@Model.zakaz.Address_Etazh" style="color: red;"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="profiles-form__block">
+                                                <div class="form-group profiles-form__input">
+                                                    <label class="form-group__label">
+                                                        Код/домофон
+                                                    </label>
+                                                    <input type="text" asp-for="@Model.zakaz.Address_Domofon" class="input form-group__input">
+                                                    <span asp-validation-for="@Model.zakaz.Address_Domofon" style="color: red;"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card checkout" style="border-radius: 0px; box-shadow: none;">
+                                <div class="checkout__title">
+                                    <div class="checkout__step">3</div>
+                                    Контактная информация
+                                </div>
+
+                                <div class="profiles-form checkout__profile">
+                                    <div class="profiles-form__section">
+                                        <div class="profiles-form__block profiles-form__block_wide">
+                                            @{
+                                                string gs = User.Identity.Name;
+                                                gs = gs.Substring(gs.IndexOf(' ') + 1);
+                                                <div class="form-group profiles-form__input">
+                                                    <label class="form-group__label form-group__label_required">
+                                                        Контактное лицо
+                                                    </label>
+                                                    <input asp-for="@Model.zakaz.Contact_Name" value="@gs" type="text" class="input form-group__input" required="">
+                                                    <span asp-validation-for="@Model.zakaz.Contact_Name" style="color: red;"></span>
+                                                </div>
+                                            }
+                                        </div>
+
+                                        <div class="profiles-form__block">
+                                            <div class="form-group profiles-form__input">
+                                                @{ 
+                                                    string gss = User.Identity.Name;
+                                                    string[] slova = gss.Split(' ');
+                                                    <label class="form-group__label form-group__label_required">
+                                                        E-mail
+                                                    </label>
+                                                    <input asp-for="@Model.zakaz.Contact_Email" value="@slova[0]" type="email" class="input form-group__input" required="">
+                                                    <span asp-validation-for="@Model.zakaz.Contact_Email" style="color: red;"></span>
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <div class="profiles-form__block">
+                                            <div class="form-group profiles-form__input">
+                                                <label class="form-group__label form-group__label_required">
+                                                    Телефон (моб)
+                                                </label>
+                                                <input id="telnam" asp-for="@Model.zakaz.Contact_Telefon" type="tel" class="input form-group__input">
+                                                <span asp-validation-for="@Model.zakaz.Contact_Telefon" style="color: red;"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="basket__row basket__row_footer">
+
+                                <div class="basket__col basket__col_footer">
+                                    <div class="basket-summary">
+                                        <div class="basket-total">
+                                            Общая стоимость заказа:
+                                            <span class="basket-total__value">@Model.summazakaza</span><span class="basket-total__currency">₽</span>
+                                        </div>
+                                        <div>Общая стоимость товаров: @Model.summazakaza₽</div>
+
+                                        <div>Цена доставки: будет выставлена оператором</div>
+
+                                    </div>
+
+                                    <div class="basket-submit" style="float: right;">
+                                        <input style="background-color: #c62306; border-color: #c62306; color: #fff;" class="btn btn_primary basket-submit__btn" type="submit" value="Оформить заказ">
+                                    </div>
+                                    <input style="opacity: 0; width:0px; height:0px;" asp-for="@Model.zakaz.StoimostZakakaTovari" value="@Model.summazakaza">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                }
+                else
+                {
+                    <h1>Корзина пуста :(</h1>
+                }
+            </main>
+        </div>
+        <div class="notmain-div-right">
+            <div class="block-right">
+                <aside class="aside aside_user">
+                    <div class="aside__user-info">
+                        <div class="user-line">
+                            <div class="user-line__avatar">
+                                <img src="https://vasko.ru/images/user_outline.svg" alt="avatar">
+                            </div>
+                            <div class="user-line__name">
+                                <div>
+                                    @{
+                                        string g = User.Identity.Name;
+                                        g = g.Substring(g.IndexOf(' ') + 1);
+                                        <b>
+                                            @g
+                                        </b>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <menu class="user-menu">
+                            <li class="user-menu__item">
+                                <a asp-action="MyZakazi" asp-controller="Categorii" class="user-menu__link user-menu__item_active">
+                                    <svg class="icon user-menu__icon" width="27" height="23" viewBox="0 0 27 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M21.273 2.80943L8.14509 8.26933V11.7754L5.85494 10.8745V7.36846L18.9829 1.9086L14.5735 0.174169C13.983 -0.0580562 13.017 -0.0580562 12.4265 0.174169L1.5687 4.44516C0.703681 4.78541 -0.00220073 5.74897 5.15601e-06 6.58646L0.0267404 16.5988C0.0289904 17.4452 0.750623 18.4098 1.63033 18.7426L12.4597 22.838C13.0308 23.054 13.9654 23.054 14.5365 22.8381L25.3696 18.7425C26.2493 18.41 26.971 17.4454 26.9732 16.5991L27 6.58646C27.0022 5.74897 26.2964 4.78541 25.4313 4.44516L21.273 2.80943ZM24.547 10.8238L23.9115 11.0846L23.8987 15.0404C23.8981 15.2132 23.7255 15.419 23.5136 15.4999L22.5623 15.8632C22.3538 15.9429 22.1851 15.869 22.185 15.6984L22.1817 11.7946L21.5662 12.0472C21.2767 12.166 21.0956 11.9797 21.2393 11.7115L22.7105 8.96558C22.859 8.68839 23.2314 8.52849 23.3804 8.67883L24.8902 10.2014C25.0409 10.3534 24.8496 10.6997 24.547 10.8238ZM18.3351 17.1765C18.3367 17.3421 18.1785 17.5372 17.9821 17.6122L17.1 17.9491C16.9065 18.023 16.7482 17.9502 16.746 17.7867L16.6944 14.0467L16.1236 14.281C15.8551 14.3911 15.6838 14.2104 15.8145 13.9553L17.1517 11.345C17.2866 11.0816 17.6314 10.9336 17.7721 11.0794L19.1971 12.5561C19.3395 12.7035 19.1657 13.0323 18.8856 13.1473L18.2971 13.3888L18.3351 17.1765ZM25.5971 16.0906C25.5964 16.1775 25.5082 16.2805 25.4 16.3207L15.3237 20.0656C15.2297 20.1005 15.1524 20.0639 15.151 19.9838L15.1433 19.5481C15.1419 19.4678 15.217 19.3739 15.3112 19.3385L25.4054 15.5344C25.5137 15.4936 25.6012 15.531 25.6005 15.6181L25.5971 16.0906Z" fill="#C62306" />
+                                    </svg> Мои заказы
+                                </a>
+                            </li>
+                            <li class="user-menu__item">
+                                <a href="/personal/profiles/" class="user-menu__link">
+                                    <svg class="icon user-menu__icon" width="21" height="12" viewBox="0 0 21 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7.78332 11.2066H0.0566406C0.0566406 9.41804 1.08937 7.89337 2.54156 7.28843C2.22986 6.92842 2.0035 6.38102 1.88996 5.55498C1.74025 5.5895 1.50811 5.3947 1.4394 5.09799C1.36925 4.79634 1.32369 4.30893 1.47484 4.26208C1.51968 4.24811 1.56668 4.25797 1.61225 4.2851V3.44673C1.61225 2.12671 1.33888 1.35081 3.23728 1.12971L3.22065 1.12478C3.22065 1.12478 4.71695 0.961217 5.11109 0.558472C5.11109 0.558472 5.12194 0.89875 5.28105 1.27191C6.15684 1.65328 6.26677 2.53521 6.24146 3.44755V4.28674C6.28774 4.25962 6.33475 4.24976 6.37959 4.26373C6.53074 4.31058 6.45046 4.81606 6.38104 5.11936C6.31306 5.41278 6.11707 5.58786 5.96881 5.55662C5.85816 6.34321 5.61517 6.90787 5.27815 7.2835C6.74119 7.88104 7.78332 9.40818 7.78332 11.2066ZM20.6245 1.75356C20.6245 1.29962 20.2565 0.931628 19.8026 0.931628H10.7192C10.2652 0.931628 9.89724 1.29962 9.89724 1.75356V1.75356C9.89724 2.2075 10.2652 2.57549 10.7192 2.57549H19.8026C20.2565 2.57549 20.6245 2.2075 20.6245 1.75356V1.75356ZM20.6245 6.00046C20.6245 5.54652 20.2565 5.17853 19.8026 5.17853H10.7192C10.2652 5.17853 9.89724 5.54652 9.89724 6.00046V6.00046C9.89724 6.4544 10.2652 6.82239 10.7192 6.82239H19.8026C20.2565 6.82239 20.6245 6.4544 20.6245 6.00046V6.00046ZM20.6245 10.2482C20.6245 9.79425 20.2565 9.42626 19.8026 9.42626H10.7192C10.2652 9.42626 9.89724 9.79425 9.89724 10.2482V10.2482C9.89724 10.7021 10.2652 11.0701 10.7192 11.0701H19.8026C20.2565 11.0701 20.6245 10.7021 20.6245 10.2482V10.2482Z" fill="#C62306" />
+                                    </svg> Профиль покупателя
+                                </a>
+                            </li>
+                            <li class="user-menu__item">
+                                <a asp-controller="Home" asp-action="Logout" class="user-menu__link">
+                                    <svg class="icon user-menu__icon" width="27" height="19" viewBox="0 0 27 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8.21829 14.3131C8.32256 14.1184 8.31111 13.8822 8.18865 13.6986L6.78293 11.5899H15.2889C16.457 11.5899 17.4073 10.6397 17.4073 9.47157C17.4073 8.30348 16.457 7.3532 15.2889 7.3532H6.78293L8.18865 5.24457C8.3112 5.06093 8.32256 4.82475 8.21829 4.63002C8.11411 4.43539 7.91129 4.31384 7.69047 4.31384H3.63811C3.43802 4.31384 3.25102 4.41384 3.14002 4.58048L0.100568 9.13947C-0.0335227 9.34057 -0.0335227 9.60247 0.100568 9.80366L3.13993 14.3627C3.25093 14.5292 3.43793 14.6293 3.63802 14.6293H7.69047C7.91138 14.6293 8.1142 14.5077 8.21829 14.3131Z" fill="#C62306" />
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7 0.5625C5.34315 0.5625 4 1.90565 4 3.5625L17 3.5625C18.6569 3.5625 20 4.90565 20 6.5625V12.5625C20 14.2194 18.6569 15.5625 17 15.5625H4C4 17.2194 5.34315 18.5625 7 18.5625H24C25.6569 18.5625 27 17.2194 27 15.5625V3.5625C27 1.90565 25.6569 0.5625 24 0.5625H7Z" fill="#C62306" />
+                                    </svg>Выйти из аккаунта
+                                </a>
+                            </li>
+                        </menu>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+</main>
+
+<link rel="stylesheet" href="~/css/stylekorzina.css">
+@*<script src="~/lib/jquery-validation/dist/jquery.validate.min.js" defer></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" defer></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js" type="text/javascript"></script>*@
+<script>
+    $("#telnam").mask('+7(999)999-99-99');
+</script>
+

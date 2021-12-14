@@ -1,0 +1,123 @@
+﻿@model ShopMagazin.Models.Categorii
+
+<link rel="stylesheet" type="text/css" href="~/css/style_list.css" />
+<link rel="stylesheet" type="text/css" href="~/css/styleInputFile.css" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<div class="modal-content">
+    <div class="modal-windows">
+        <div class="obratnii-zvonok">
+            <div class="form-edit fformms" style="padding: 30px; background-color: #fff; border-radius: 5px; box-shadow: 1px 1px 10px 0 rgb(0 0 0 / 12%); color: #696969; ">
+                <div class="zvonok-title">Изменение категории</div>
+                <form asp-action="EditCat" asp-controller="Tovari" method="post" class="callback-from" enctype="multipart/form-data">
+                    <div>
+                        <div class="form-zap">
+                            <label asp-for="NameCategori" class="required"></label>
+                            <input type="text" asp-for="NameCategori" class="inputs imz-in" />
+                            <span asp-validation-for="NameCategori" style="color: red;"></span>
+                        </div>
+                        
+                        <label asp-for="ImageId" class="required"></label>
+                        <div class="form-zap">
+                            <div class="profile-picture-upload">
+                                <img src="@Url.Action("GetImage", new { id=Model.ImageId})" alt="Profile picture preview" class="imagePreview">
+                                <a class="action-button mode-upload" style="margin-top: 15px; color: White;">Загрузить</a>
+                                <input accept="image/png, image/jpg, image/jpeg" type="file" id="olo" class="hidden" name="uploadedFile" />
+                            </div>
+                        </div>
+                        <span asp-validation-for="ImageId" style="color: red;"></span>
+
+                        <script type="text/javascript">
+                            document.getElementById('olo').addEventListener('change', function () {
+                                if (this.value) {
+                                    document.getElementById('checker').value = 'true';
+                                    console.log(document.getElementById('checker').value);
+                                }
+                            });
+
+                            picturePreview = document.querySelector(".imagePreview");
+                            actionButton = document.querySelector(".action-button");
+                            fileInput = document.querySelector("input[name='uploadedFile']");
+                            fileReader = new FileReader();
+
+                            DEFAULT_IMAGE_SRC = "https://cs6.pikabu.ru/avatars/852/v852649-75385198.jpg";
+
+                            actionButton.addEventListener("click", () => {
+                               if (picturePreview.src !== DEFAULT_IMAGE_SRC) {
+                                    resetImage();
+                               } else {
+                                    fileInput.click();
+                                }
+                            });
+
+                            fileInput.addEventListener("change", () => {
+                                refreshImagePreview();
+                            });
+
+                            function resetImage() {
+                                setActionButtonMode("upload");
+                                picturePreview.src = DEFAULT_IMAGE_SRC;
+                                document.getElementById('checker').value = '';
+                                fileInput.value = "";
+                            }
+
+                            function setActionButtonMode(mode) {
+                                let modes = {
+                                    "upload": function () {
+                                        actionButton.innerText = "Загрузить";
+                                        actionButton.classList.remove("mode-remove");
+                                        actionButton.classList.add("mode-upload");
+                                    },
+                                    "remove": function () {
+                                        actionButton.innerText = "Удалить";
+                                        actionButton.classList.remove("mode-upload");
+                                        actionButton.classList.add("mode-remove");
+                                    }
+                                }
+                                return (modes[mode]) ? modes[mode]() : console.error("unknown mode");
+                            }
+
+                            function refreshImagePreview()
+                            {
+                                if (fileInput.files && fileInput.files.length > 0)
+                                {
+                                    var fileName = fileInput.value,
+                                        idxDot = fileName.lastIndexOf(".") + 1,
+                                        extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+                                    console.log("hsjfd  " + fileName);
+                                    if (extFile == "jpg" || extFile == "jpeg" || extFile == "png")
+                                    {
+                                        fileReader.readAsDataURL(fileInput.files[0]);
+                                        fileReader.onload = (e) => {
+                                            picturePreview.src = e.target.result;
+                                            setActionButtonMode("remove");
+                                        }
+                                    }
+                                    else {
+                                        alert("Только jpg/jpeg и png файлы можно использовать!");
+                                        fileInput.value = "";
+                                        document.getElementById('checker').value = '';
+                                    }
+                                }
+                            }
+                            document.getElementById('checker').value = 'true';
+                            setActionButtonMode("remove");
+                            refreshImagePreview();
+                        </script>
+
+                        <input type="text" asp-for="ImageId" id="checker" value="" class="inputs imz-in" style="width: 0; height: 0; opacity: 0;" />
+                        <div class="form-zap">
+                            <div class="btn-center">
+                                <input class="sbm-zvonok" type="submit" value="Изменить" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="btn-center">
+                    <button class="sbm-zvonok otm" style="background-color: #c4c4c4; margin-top: 15px; color: White;" onclick='$(".modal-content").remove();'>Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js" defer></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" defer></script>

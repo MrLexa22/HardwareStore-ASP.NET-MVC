@@ -1,0 +1,157 @@
+﻿@model ShopMagazin.Models.TovariManage
+
+<link rel="stylesheet" type="text/css" href="~/css/style_list.css" />
+<link rel="stylesheet" type="text/css" href="~/css/styleInputFile.css" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="~/lib/jQuery-Mask-Plugin-master/dist/jquery.mask.js"></script>
+<script src="~/lib/jQuery-Plugin-To-Restrict-Input-To-Numeric-Values-Mask-As-Number/jquery-mask-as-number.js"></script>
+<div class="modal-content">
+    <div class="modal-windows">
+        <div class="obratnii-zvonok">
+            <div class="form-edit fformms" style="padding: 30px; background-color: #fff; border-radius: 5px; box-shadow: 1px 1px 10px 0 rgb(0 0 0 / 12%); color: #696969; ">
+                <div class="zvonok-title">Изменение товара</div>
+                <form asp-action="EditTovar" asp-controller="ManageTovari" method="post" class="callback-from" enctype="multipart/form-data">
+                    <div>
+                        <input type="text" asp-for="@Model.tovar.Id" value="@Model.tovar.Id" style="z-index: -100; opacity: 0; width: 0px; height: 0px; margin: 0;" />
+                        <input type="text" asp-for="@Model.tovar.NameCategori" value="@Model.tovar.NameCategori" style="z-index: -100; opacity: 0; width: 0px; height: 0px; margin: 0;" />
+                        <input type="text" asp-for="@Model.tovar.NamePodCategori" value="@Model.tovar.NamePodCategori" style="z-index: -100; opacity: 0; width: 0px; height: 0px; margin: 0;" />
+                        <div class="form-zap">
+                            <label class="nonrequired">Наименование категории: </label>
+                            <label class="nonrequired" style="color: black;">@Html.DisplayFor(model => model.tovar.NameCategori)</label>
+                        </div>
+                        <div class="form-zap">
+                            <label class="nonrequired">Наименование подкатегории: </label>
+                            <label class="nonrequired" style="color: black;">@Html.DisplayFor(model => model.tovar.NamePodCategori)</label>
+                        </div>
+                        <div class="form-zap">
+                            <label asp-for="@Model.tovar.articul" class="required"></label>
+                            <input type="text" asp-for="@Model.tovar.articul" id="telnam" class="inputs imz-in" />
+                            <span asp-validation-for="@Model.tovar.articul" style="color: red;"></span>
+                        </div>
+                        <div class="form-zap">
+                            <label asp-for="@Model.tovar.NameTovar" class="required"></label>
+                            <input type="text" asp-for="@Model.tovar.NameTovar" class="inputs imz-in" />
+                            <span asp-validation-for="@Model.tovar.NameTovar" style="color: red;"></span>
+                        </div>
+                        <div class="form-zap">
+                            <label asp-for="@Model.tovar.ModelTovar" class="required"></label>
+                            <input type="text" asp-for="@Model.tovar.ModelTovar" class="inputs imz-in" />
+                            <span asp-validation-for="@Model.tovar.ModelTovar" style="color: red;"></span>
+                        </div>
+                        <div class="form-zap">
+                            <label asp-for="@Model.tovar.Cena" class="required"></label>
+                            <input type="text" id="cena" data-mask-as-number-min="1" data-mask-as-number-max="50000000" asp-for="@Model.tovar.Cena" class="inputs imz-in" />
+                            <span asp-validation-for="@Model.tovar.Cena" style="color: red;"></span>
+                        </div>
+                        <script>
+                            $('#telnam').mask('0000000');
+                            $('#cena').maskAsNumber();
+                        </script>
+                        <div class="form-zap">
+                            <label asp-for="@Model.tovar.StranaProizvoditel" class="required"></label>
+                            <input type="text" asp-for="@Model.tovar.StranaProizvoditel" class="inputs imz-in" />
+                            <span asp-validation-for="@Model.tovar.StranaProizvoditel" style="color: red;"></span>
+                        </div>
+
+                        <label asp-for="@Model.tovar.ImageId" class="required"></label>
+                        <div class="form-zap">
+                            <div class="profile-picture-upload">
+                                <img src="@Url.Action("GetImage", new { id=Model.tovar.ImageId})" alt="Profile picture preview" class="imagePreview">
+                                <a class="action-button mode-upload" style="margin-top: 15px; color: White;">Загрузить</a>
+                                <input accept="image/png, image/jpg, image/jpeg" type="file" id="olo" class="hidden" name="uploadedFile" />
+                            </div>
+                        </div>
+                        <span asp-validation-for="@Model.tovar.ImageId" style="color: red;"></span>
+
+                        <script type="text/javascript">
+                            document.getElementById('olo').addEventListener('change', function () {
+                                if (this.value) {
+                                    document.getElementById('checker').value = 'true';
+                                    console.log(document.getElementById('checker').value);
+                                }
+                            });
+
+                            picturePreview = document.querySelector(".imagePreview");
+                            actionButton = document.querySelector(".action-button");
+                            fileInput = document.querySelector("input[name='uploadedFile']");
+                            fileReader = new FileReader();
+
+                            DEFAULT_IMAGE_SRC = "https://cs6.pikabu.ru/avatars/852/v852649-75385198.jpg";
+
+                            actionButton.addEventListener("click", () => {
+                                if (picturePreview.src !== DEFAULT_IMAGE_SRC) {
+                                    resetImage();
+                                } else {
+                                    fileInput.click();
+                                }
+                            });
+
+                            fileInput.addEventListener("change", () => {
+                                refreshImagePreview();
+                            });
+
+                            function resetImage() {
+                                setActionButtonMode("upload");
+                                picturePreview.src = DEFAULT_IMAGE_SRC;
+                                document.getElementById('checker').value = '';
+                                fileInput.value = "";
+                            }
+
+                            function setActionButtonMode(mode) {
+                                let modes = {
+                                    "upload": function () {
+                                        actionButton.innerText = "Загрузить";
+                                        actionButton.classList.remove("mode-remove");
+                                        actionButton.classList.add("mode-upload");
+                                    },
+                                    "remove": function () {
+                                        actionButton.innerText = "Удалить";
+                                        actionButton.classList.remove("mode-upload");
+                                        actionButton.classList.add("mode-remove");
+                                    }
+                                }
+                                return (modes[mode]) ? modes[mode]() : console.error("unknown mode");
+                            }
+
+                            function refreshImagePreview() {
+                                if (fileInput.files && fileInput.files.length > 0) {
+                                    var fileName = fileInput.value,
+                                        idxDot = fileName.lastIndexOf(".") + 1,
+                                        extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+                                    console.log("hsjfd  " + fileName);
+                                    if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
+                                        fileReader.readAsDataURL(fileInput.files[0]);
+                                        fileReader.onload = (e) => {
+                                            picturePreview.src = e.target.result;
+                                            setActionButtonMode("remove");
+                                        }
+                                    }
+                                    else {
+                                        alert("Только jpg/jpeg и png файлы можно использовать!");
+                                        fileInput.value = "";
+                                        document.getElementById('checker').value = '';
+                                    }
+                                }
+                            }
+                            document.getElementById('checker').value = 'true';
+                            setActionButtonMode("remove");
+                            refreshImagePreview();
+                        </script>
+
+                        <input type="text" asp-for="@Model.tovar.ImageId" id="checker" value="" class="inputs imz-in" style="width: 0; height: 0; opacity: 0;" />
+                        <div class="form-zap">
+                            <div class="btn-center">
+                                <input class="sbm-zvonok" type="submit" value="Изменить" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="btn-center">
+                    <button class="sbm-zvonok otm" style="background-color: #c4c4c4; margin-top: 15px; color: White;" onclick='$(".modal-content").remove();'>Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js" defer></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" defer></script>
